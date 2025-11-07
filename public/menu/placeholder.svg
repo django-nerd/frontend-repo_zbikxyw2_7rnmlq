@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="800" height="450" viewBox="0 0 800 450">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#03111a"/>
+      <stop offset="100%" stop-color="#000000"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="450" fill="url(#g)"/>
+  <g fill="#00B4FF" opacity="0.3">
+    <circle cx="680" cy="60" r="120" />
+    <circle cx="80" cy="400" r="140" />
+  </g>
+  <g fill="#00B4FF">
+    <rect x="340" y="170" width="120" height="120" rx="24" opacity="0.15" />
+    <rect x="365" y="195" width="70" height="70" rx="16" opacity="0.6" />
+  </g>
+  <text x="50%" y="360" text-anchor="middle" font-family="Inter, Arial" font-size="22" fill="#9ccfe0">Image coming soon</text>
+  <text x="50%" y="395" text-anchor="middle" font-family="Inter, Arial" font-size="16" fill="#7fb9ce">Back Bencher Café</text>
+</svg>

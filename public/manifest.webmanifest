@@ -1,0 +1,12 @@
+{
+  "name": "Back Bencher Café",
+  "short_name": "BBCafé",
+  "description": "Sip. Snack. Sit Back. Order at Back Bencher Café.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#000000",
+  "theme_color": "#00B4FF",
+  "icons": [
+    { "src": "/favicon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ]
+}
