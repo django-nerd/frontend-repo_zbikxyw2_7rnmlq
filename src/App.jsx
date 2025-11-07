@@ -7,6 +7,8 @@ import Checkout from './components/Checkout';
 import OrderSuccess from './components/OrderSuccess';
 import MobileMenuSheet from './components/MobileMenuSheet';
 import QRHint from './components/QRHint';
+import CounterScreen from './components/CounterScreen';
+import { pushOrder } from './utils/orders';
 
 function App() {
   const [view, setView] = useState('home');
@@ -20,6 +22,15 @@ function App() {
   });
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [order, setOrder] = useState(null);
+
+  // Read view from URL param to support opening special screens in new tab (e.g., checkout, counter)
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(window.location.search);
+      const initialView = params.get('view');
+      if (initialView) setView(initialView);
+    } catch {}
+  }, []);
 
   // Minimal PWA bootstrapping without editing index.html
   useEffect(() => {
@@ -78,12 +89,35 @@ function App() {
     );
   const removeItem = (id) => setCart((prev) => prev.filter((p) => p.id !== id));
 
-  const goCheckout = () => setView('checkout');
+  const openCheckoutInNewTab = () => {
+    try {
+      const url = new URL(window.location.href);
+      url.searchParams.set('view', 'checkout');
+      // preserve table param if present
+      const table = new URLSearchParams(window.location.search).get('table');
+      if (table) url.searchParams.set('table', table);
+      window.open(url.toString(), '_blank', 'noopener,noreferrer');
+    } catch {
+      // fallback
+      window.open('/?view=checkout', '_blank');
+    }
+  };
+
+  const goCheckout = () => {
+    openCheckoutInNewTab();
+  };
   const goMenu = () => setView('menu');
   const goHome = () => setView('home');
 
   const confirmOrder = (o) => {
-    setOrder(o);
+    const full = {
+      ...o,
+      id: `ORD-${Date.now()}`,
+      status: 'new',
+      createdAt: Date.now(),
+    };
+    pushOrder(full);
+    setOrder(full);
     setCart([]);
     setView('success');
   };
@@ -97,7 +131,22 @@ function App() {
       </div>
 
       <Navbar
-        onNavigate={(v) => setView(v)}
+        onNavigate={(v) => {
+          if (v === 'checkout') {
+            openCheckoutInNewTab();
+          } else if (v === 'counter') {
+            // open counter screen in new tab for staff
+            try {
+              const url = new URL(window.location.href);
+              url.searchParams.set('view', 'counter');
+              window.open(url.toString(), '_blank', 'noopener,noreferrer');
+            } catch {
+              window.open('/?view=counter', '_blank');
+            }
+          } else {
+            setView(v);
+          }
+        }}
         cartCount={cartCount}
         onToggleMenu={() => setMobileMenuOpen(true)}
       />
@@ -120,11 +169,25 @@ function App() {
 
       {view === 'success' && <OrderSuccess order={order} onBackToHome={goHome} />}
 
+      {view === 'counter' && <CounterScreen />}
+
       <MobileMenuSheet
         open={mobileMenuOpen}
         onClose={() => setMobileMenuOpen(false)}
         onNavigate={(v) => {
-          setView(v);
+          if (v === 'checkout') {
+            openCheckoutInNewTab();
+          } else if (v === 'counter') {
+            try {
+              const url = new URL(window.location.href);
+              url.searchParams.set('view', 'counter');
+              window.open(url.toString(), '_blank', 'noopener,noreferrer');
+            } catch {
+              window.open('/?view=counter', '_blank');
+            }
+          } else {
+            setView(v);
+          }
           setMobileMenuOpen(false);
         }}
       />

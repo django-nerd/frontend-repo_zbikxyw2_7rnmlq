@@ -37,6 +37,12 @@ const Navbar = ({ onNavigate, cartCount, onToggleMenu }) => {
             Home
           </button>
           <button
+            onClick={() => onNavigate('counter')}
+            className="px-4 py-2 rounded-full text-sm font-medium text-white/90 hover:text-white border border-white/10 hover:border-white/20 transition"
+          >
+            Counter
+          </button>
+          <button
             onClick={() => onNavigate('checkout')}
             className="px-4 py-2 rounded-full text-sm font-medium text-black bg-[#00B4FF] hover:brightness-110 transition shadow-lg shadow-sky-500/20"
           >
